@@ -156,5 +156,3 @@ for VAL in ${LIST[@]}; do
   COUNT="`expr COUNT + 1`"
 done
 ```
-
-## Conditional Statements
