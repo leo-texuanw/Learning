@@ -47,7 +47,7 @@ File content for testing can be something like:
 - "i7 4GHz;16GB;4TB"
 
 ### Trap and Signals
-Trap takes two or more parameters.
+`trap` takes two or more parameters.
 - The 1st one being what to do when an event happens in single quotes.
 - And then what we are trapping for.
 ```

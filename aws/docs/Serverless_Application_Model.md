@@ -25,7 +25,7 @@ Framework for developing and deploying serverless applications.
     - Zip and upload Application code and Swagger File (optional) to Code S3 bucket
     - Transform SAM Template into CloudFormation Template
   - aws cloudformation deploy or sam deploy
-    - sam deploy  --template-file gen/template-generated.yaml --stack-name <stack_name> --capabilities CAPABILITY_IAM
+    - sam deploy --template-file gen/template-generated.yaml --stack-name <stack_name> --capabilities CAPABILITY_IAM
     - Create and execute change set and CloudFormation will apply them to the Stack.
 
 ### SAM Policy Templates

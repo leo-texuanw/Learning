@@ -1,4 +1,5 @@
 ## AWS CloudFormation
+Allows you to manage, configure and provision AWS infrastucture as YAML and JSON code. 
 
 ### Template
 
@@ -11,7 +12,7 @@
 - Mapping: The static variables for the template (like map a region to it's key-pair)
 - **Resources:** Your AWS resources declared in the template (Mandatory)
 - Condition: List of conditions to perform resource creation (like dev, test)
-- Transform
+- Transform: For referencing additional code stored in S3 (e.g. like Cloudformation snippets), allowing for code reuse
 - Outputs: References to what was created (for logging or for other stacks to use)
 
 #### Template helpers
@@ -193,10 +194,14 @@ When you update a stack, you need to know what changes before it happens for gre
 ### Nested stacks
 
 Nested stacks are stacks as part of other stacks. They allow you to isolate repeated patterns/ common components in separate stacks and call them from other stacks.
+And nested stacks can contain other nested stacks.
 
 Example: Load Balancer configuration that is re-used; Security Group that is re-used.
 
 Nested stacks are considered best practice. To update a nested stack, always update the parent (root stack)
+
+You create a nested stack by adding the resource "AWS:CloudFormation::Stack" to a "root" or "parent" stack.
+And in `Properties` set `TemplateURL: https://s3.amazonaws.com/.../template.yml`.
 
 #### CloudFormation - Cross vs Nested Stacks
 

@@ -1,4 +1,4 @@
-Storing notes and experience of reading and developing.
+Notes and thoughts out of learning and coding.
 
 # How to learn effectively
 1. Chunk it up (Mind Map)

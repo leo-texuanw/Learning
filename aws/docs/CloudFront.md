@@ -2,6 +2,7 @@
 
 Content Delivery Network (CDN).
 
+- A CDN is a mechanism to deliver content quickly and efficiently based on geographic location.
 - Improves read performance, content is cached at the edge
 - There are 216 Point of Presence globally (edge locations)
 - DDos protection, integration with Shield, AWS Web Application Firewall
@@ -9,6 +10,7 @@ Content Delivery Network (CDN).
 
 ### CloudFront at a high level
 
+CloudFront is often used with S3 to deploy content globally.
 Client request to an Edge Location and the Edge Location would then forward request to your origin. And Edge Location would cache the return.
 
 ### CloudFront - Origins
@@ -120,3 +122,16 @@ S3 Pre-Signed URL:
 - Issue a request as the person who pre-signed the URL
 - Uses the IAM key of the signing IAM principal
 - Limited lifetime
+
+## Other Content Delivery Services
+### Global Accelerator
+Sends your users through the AWS global network when accessing your content, speeding up delivery.
+- Improves latency and availability of single-region apps.
+- 60% performance boost.
+- Automatically re-routes traffic to healthy available regional endpoints.
+
+### S3 Transfer Accelerator
+Improves content uploads and downloads to and from S3 buckets. 
+- Fast transfer of files over long distances.
+- Uses CloudFront's globally distributed edge locations.
+- Customers around the world can upload to a central bucket.

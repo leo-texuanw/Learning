@@ -1,5 +1,11 @@
 ## Conditional Statements
 
+### Execution operators
+- `||`: OR
+- `&&`: AND
+
+`rm somefile 2> /dev/null && echo "File exists and was removed" || echo "File not exists"`
+
 ### If statement
 ```
 #!/bin/bash
@@ -26,11 +32,6 @@ else
   echo "You didn't follow the directions!"
 fi
 ```
-
-### Execution operators
-- `||`: OR
-- `&&`: AND
-`rm somefile 2> /dev/null && echo "File exists and was removed" || echo "File not exists"`
 
 ### For loop
 ```

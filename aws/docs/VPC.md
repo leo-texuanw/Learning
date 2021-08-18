@@ -1,6 +1,7 @@
 ## VPC
 
 VPC: Virtual private cloud (regional resource)
+![VPC_Example](./images/vpc_example.png)
 
 Subnets: Tied to an AZ, network partition of the VPC (AZ resource)
 

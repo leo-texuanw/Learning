@@ -1,3 +1,4 @@
+First row:
 ``` shell
 # !/bin/bash
 ```
@@ -12,7 +13,7 @@ BU=homeuser$(date +%Y%m%d).tgz
 tar cvfz $BU $(pwd)
 ```
 
-To run a unexecutable shell file:
+To run an unexecutable shell file:
 ```
     $ sh fname.sh
     $ ./fname.sh
@@ -44,7 +45,7 @@ echo "With Alias, UFILES is: $B"
 
 ### Exit code
 ```
-$ $?
+$ $?        # print last exit code
 ```
 
 ```
@@ -66,9 +67,9 @@ expr \( 2 + 2 \) \* 4   # 16
 ```
 
 ### Global and local environment variables
-- `set`: Shows shell-local variables and environment varialbes
+- `$ set`: Shows shell-local variables and environment varialbes
     - Local variable: `a=1`
-- `env`: Only sees environment variables
+- `$ env`: Only sees environment variables
     - Environment variable: `export a=1`
 
 ### Special characters
@@ -87,7 +88,7 @@ Balck hole of Linux system. Whatever you write to it, it's ignored.
 Can be used to redirect output or errors.
 ```
 $ ls -al >> /dev/null
-$ echo "Hello World" >> /dev/null
+$ echo "Hello World" > /dev/null
 ```
 
 ### The Read Statement
