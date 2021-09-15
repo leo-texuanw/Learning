@@ -28,8 +28,10 @@ Your whole AWS security is there:
 - MFA (Multi Factor Authentication) can be setup
 - IAM has predefined "'managed policies"
 - Best give users the minimal amount of permissions they need to perform their job
+    - New users has no permission to any resources
 
 #### IAM Federation
+You can combine your existing user account with AWS. E.g. when you log on to your PC, you can use the same credentials to log in to AWS if you set up federation.
 
 #### Policy
 

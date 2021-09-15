@@ -21,8 +21,10 @@ You pay 0.5$ per month per hosted zone. Route 53 can use:
 Route 53 has advanced features such as:
 
 - Load balancing (through DNS - also called client load balancing)
-- Health checks (although limited...)
+- Health checks on AWS resources (although limited...)
 - Routing policy: simple, failover, geolocation, latency, weighted, multi value
+
+It also provides domain name registration and supports hybrid cloud architecture.  
 
 ### DNS Records TTL (Time to Live)
 

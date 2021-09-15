@@ -1,6 +1,6 @@
 ## Amazon S3
 
-One of the main building blocks of AWS. 
+Simple storage service is one of the main building blocks of AWS. 
 
 ### S3 Buckets
 
@@ -16,6 +16,8 @@ Directories.
   - Must start with lowercase letter or number
 
 ### Objects
+
+S3 manages data as objects rather than in file systems or data blocks.
 
 Objects (Files) have a key. The key is the FULL path, which is composed of prefix + object name, e.g. s3://my-bucket/my_folder/another_folder/my_file.txt.
 
@@ -40,29 +42,10 @@ It's best practice to version you buckets:
 Notes:
 
 - Any file that is not versioned prior to enabling versioning will have version "null"
+- Versioning cannot be disabled once enabled.
 - Suspending versioning does not delete the previous versions
 
 ### S3 Encryption for Objects
-
-4 methods of encrypting S3 objects:
-
-- SSE-S3: encrypts S3 objects using keys handled & managed by AWS
-  - Ojbect is encrypted server side
-  - AES-256 encryption type
-  - Must set HTTP/S header: "x-amz-server-side-encruption":"AES256"
-- SSE-KMS: encryption using keys handled & managed by AWS Key management Service
-  - KMS Advantages: user control + audit trail
-  - Object is encrypted server side
-  - Must set HTTP/S header: "x-amz-server-side-encryption":"aws:kms"
-- SSE-C: server-side encryption using data keys fully managed by the customer outside of AWS (when you want to manage your own encryption keys)
-  - Amazon S3 does not store the encryption key you provide
-  - HTTPS is mandatory for SSE-C.
-  - Provided content + Encryption key in HTTP headers, for every HTTP request made
-- Client Side Encryption
-  - Client library such as the Amazon S3 Encryption client might be helpful
-  - Clients must encrypt data themselves before sending to S3
-  - Clients must decrypt data themselves when retrieving from S3
-  - Customer fully manages the keys and encryption cycle
 
 #### Encryption in transit (SSL/ TLS)
 
@@ -74,6 +57,26 @@ Amazon S3 exposes:
 - HTTPS endpoint: encrypted in flight
 
 You are free to use the endpoint you want, but HTTPS is recommended. Most clients would use the HTTPS endpoint by default.
+
+#### Encryption at rest: Server-Side Encryption
+
+- SSE-S3: encrypts S3 objects using keys handled & managed by AWS
+  - Easiest
+  - AES-256 encryption type
+  - Must set HTTP/S header: "x-amz-server-side-encruption":"AES256"
+- SSE-KMS: encryption using keys handled & managed by AWS Key management Service
+  - KMS Advantages: user control + audit trail
+  - Must set HTTP/S header: "x-amz-server-side-encryption":"aws:kms"
+- SSE-C: server-side encryption using data keys fully managed by the customer outside of AWS (when you want to manage your own encryption keys)
+  - Amazon S3 does not store the encryption key you provide
+  - HTTPS is mandatory for SSE-C.
+  - Provided content + Encryption key in HTTP headers, for every HTTP request made
+
+#### Encryption at rest: Client-Side Encryption
+  - Clients must encrypt data themselves before sending to S3
+  - Clients must decrypt data themselves when retrieving from S3
+  - Client library such as the Amazon S3 Encryption client might be helpful
+  - Customer fully manages the keys and encryption cycle
 
 ### S3 Security
 
@@ -108,9 +111,30 @@ JSON based policies.
 
 ### S3 Websites
 
-S3 can host static websites and have them accessible on the www. The website URL will be `<bucket-name>.s3-website-<AWS-region>.amazonaws.com` or `<bucket-name>.s3-website.<AWS-region>.amazonaws.com`.
+S3 can host static websites and have them accessible on the www\. S3 scales automatically with demand.  
+The website URL will be `<bucket-name>.s3-website-<AWS-region>.amazonaws.com` or `<bucket-name>.s3-website.<AWS-region>.amazonaws.com`.
 
-If you get a 403 (Forbidden) error, make sure to make the bucket public and make the bucket policy allows public reads (GetObject) !
+If you get a 403 (Forbidden) error, make sure to make the bucket public and make the bucket policy allows public reads (GetObject)!
+
+Bucket policy template:
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "PublicReadGetObject",
+      "Effect": "Allow",
+      "Principal": "*",
+      "Action": [
+        "s3:GetObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::BUCKET_NAME/*"
+      ]
+    }
+  ]
+}
+```
 
 #### CORS
 
@@ -174,8 +198,8 @@ The old way to enable default encryption was to use a bucket policy and refuse a
 
 ```json
 {
-	"Version": "2012-10-17",
-	"Id": "PutOjbectPolicy",
+  "Version": "2012-10-17",
+  "Id": "PutOjbectPolicy",
   "Statement": [
     {
       "Sid": "DenyIncorrectEncryptionHeader",
@@ -236,8 +260,8 @@ The log format is at: [https://docs.aws.amazon.com/AmazonS3/latest/dev/LogFormat
 
 - After activating, only new objects are replicated (not retroactive)
 - For DELETE operations
-  - If you delete without a version ID, it adds a delete marker, not replicated
-  - If you delete with a version ID, it deletes in the source, not replicated
+  - If you delete without a version ID, it adds a delete marker, not replicated by default
+  - If you delete with a version ID, it deletes in the source, not replicated by default
 - There is no "chaining" of replication
   - If bucket 1 has replication into bucket 2, which has replication into bucket 3, then objects created in bucket 1 are not replicated to bucket 3
 
@@ -263,7 +287,7 @@ $ aws s3 presign s3://my-sample-bucket/file_name --expires-in 300 --region ap-so
 
 ### S3 Storage Classes
 
-All classes has high durability (99.999999999%) of objects across multiple AZ. Which means if you store 10 million objects with Amazon S3, you can on average expect to incur a loss of a single object once every 10,000 years.
+All classes has high durability (99.999999999%) of objects across at least 3 AZ. Which means if you store 10 million objects with Amazon S3, you can on average expect to incur a loss of a single object once every 10,000 years.
 
 #### Amazon S3 Standard - General Purpose
 
@@ -273,7 +297,7 @@ All classes has high durability (99.999999999%) of objects across multiple AZ. W
 
 #### Amazon S3 Standard-Infrequent Access (IA)
 
-- Suitable for data that is less frequently accessed, but  requires rapid access when needed.
+- Suitable for data that is less frequently accessed, but requires rapid access when needed.
 
 - 99.9% Availability
 - Low cost compared to Amazon S3 Standard
@@ -282,12 +306,14 @@ All classes has high durability (99.999999999%) of objects across multiple AZ. W
 
 #### Amazon S3 One Zone-Infrequent Access 
 
-- Same as IA but data is stored in a single AZ.
+- Same as IA but data is stored redundantly within a single AZ.
 - 99.5% Availability
 - Low latency and high throughout performance
 - Support SSL for data at transit and encryption at rest
 - Low cost compared to IA (by 20%)
-- Use Cases: Storing secondary backup copies of on-premise data, or storing data you can recreate
+- Use Cases:
+    - Great for long-lived, infrequently accessed, non-critical data
+    - e.g. Storing secondary backup copies of on-premise data, or storing data you can recreate
 
 #### Amazon S3 Intelligent Tiering
 
@@ -349,11 +375,14 @@ Rules can be created for a certain prefix (ex - s3://mybucket/mp3/*) or certain 
 ### S3 - Baseline Performance
 
 Amazon S3 automatically scales to high request rates, latency 100-200ms. Your application can achieve at least 3500 PUT/COPY/POST/DELETE and 5500 GET/HEAD requests per second per prefix in a bucket.
+You can get better performance by simply spreading your reads across different prefixes.
 
-Example (object path => prefix):
+For example, with the following (object path => prefix):
 
 - bucket/folder1/sub1/file => /folder1/sub1/
 - bucket/folder1/sub2/file => /folder1/sub2/
+
+you can achieve 11,000 requests per second.
 
 #### S3 - KMS Limitation
 
@@ -406,11 +435,26 @@ Exam Tip: Analyse data directly on S3 => use Athena
 
 #### S3 Object Lock
 
-- Adopt a WORM (Write Once Read Many) model
-- Block an object version deletion for a specified amount of time
+- Store obejcts using a WORM (Write Once Read Many) model
+- Block an object version from being deleted or moidifed for a fixed amount of time or indefinitely
+
+##### Governance Mode
+
+Users can't overwrite or delete an object version or alter its lock settings unless they have special permissions.
+
+##### Compliance Mode
+A protected object version can't be overwritten or deleted by any user, including the root user.
+When an object is locked in compliance mode, its retention mode can't be changed and its retention period can't be shortened.
+
+When you palce a __retention period__ on an object version, AWS stores a timestamp in the object version's metadata to indicate when the retention period expires.
+After the retention period expires, the object version can be overwritten or deleted unless you also placed a legal hold on the object version.
+A legal hold is similar to a retention period but it doesn't have an associated retention period and remains in effect until removed.
+Legal holds can be freely placed and removed by any user who has the `s3:PutObjectLegalHold` permission.
+
 
 #### Glacier Vault Lock
 
-- Adopt a WORM (Write Once Read Many) model
-- Lock the policy for future edits
+It allows you to easily deploy and enforce compliance controls for individual S3 Glacier vaults with a vault lock policy.
+You can specify controls, such as WORM, in a vault lock policy and lock the policy from future edits.
+
 - Helpful for compliance and data retention
