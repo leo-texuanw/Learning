@@ -34,7 +34,7 @@ Security Groups: A firewall that controls traffic to and from an ENI/ an EC2 ins
 | Network ACL                                                  | Security Group                                               |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | Operates at the subnet level                                 | Operates at the instances level or ENI                       |
-| Supports ALLOW and DENY rules.                               | Can have only ALLOW rules                                    |
+| Supports ALLOW and DENY rules.                               | Can have only ALLOW rules (Everything is blocked by default) |
 | Stateless: Return traffic must be explicitly allowed by rules | Stateful: Return traffic is automatically allowed, regardless of any rules |
 | Process rules in number order when deciding whether to allow traffic | Evaluate all rules before deciding whether to allow traffic  |
 | Automatically applies to all instances in the subnets it's associated with. | Applies to an instance only if someone specifies the security group to it. |
@@ -70,14 +70,26 @@ Log data can go to S3/ CloudWatch Logs.
 
 ### Site to Site VPN & Direct Connect
 
-Site to Site VPN: VPN over public internet between on-premises DC and AWS. The connection is automatically encrypted. 
+**Note:** Site-to-site VPN and Direct Connect cannot access VPC endpoints.
 
-Direct Connect: Direct private physical connections between on-premises and AWS. The connection is private, secure and fast.
+#### Direct Connect
+
+Direct private physical connections between on-premises and AWS. The connection is private, secure and fast.
 
 - Goes over a private network
 - Takes at least a month to establish
 
-**Note:** Site-to-site VPN and Direct Connect cannot access VPC endpoints.
+#### Site to Site VPN
+
+VPN over public internet between on-premises DC/internal networks and AWS VPCs.
+
+- Similar to Direct Connect but data travels over the public internet.
+- The connection is automatically encrypted.
+- Supports a hybrid environment.
+
+Virtual Private Gateway: The VPN connector on the AWS side.  
+Customer Gateway: The VPN connector on the customer side.
+
 
 ### Three Tier Architecture
 
