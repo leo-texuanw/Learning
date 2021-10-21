@@ -6,6 +6,14 @@ It's a managed DB service for DB use SQL as a query language.
 
 - Postgres/ MySQL/ MariaDB/ Oracle/ Microsoft SQL Server/ Aurora (AWS Proprietary database) 
 
+RDS is generally used for online transaction processing (OLTP) workloads, not Online Analytical Processing (OLAP).
+
+#### OLTP vs OLAP
+- OLTP:
+    - Processes data from transactions in real time
+- OLAP:
+    - Processes complex queries to analyse historical data
+
 #### Advantage over using RDS versus deploying DB on EC2
 
 - RDS is a managed service:
@@ -34,17 +42,18 @@ Manually triggered by the user. Retention of backup for as long as you want.
 
 ### RDS Read Replicas for read scalability
 
-Up to 5 Read Replicas within AZ, cross AZ or cross Region. Replication is ASYNC so reads are eventually consistent. Replicas can be promoted to their own DB. 
-
-Applications must update the connection string to leverage read replicas.
-
-Read replicas are used for SELECT (=read) only kind of statements (not INSERT, UPDATE, DELETE)
+A read replica is a read-only copy of your primary database.
+- Only for SELECT (=read) kind of statements (not INSERT, UPDATE, DELETE).
+- Up to 5 Read Replicas within AZ, cross AZ or cross Region.
+- Replication is ASYNC so reads are eventually consistent.
+- Replicas can be promoted to their own DB. 
+- Each reac replica has its own DNS endpoint.
+  - Applications must update the connection string to leverage read replicas.
+- Automatic backups must be enabled in order to deploy a read replica.
 
 #### RDS Read Replicas - Use Cases
 
-Want to run a reporting application to run some analytics besides normal load. 
-
-You can create a Read Replica to run the new workload there and the production is not affected. 
+Great for read-heavy workloads and takes the load off your primary database.
 
 #### RDS Read Replicas - Network Cost
 
@@ -57,6 +66,8 @@ Replicas across AZ is costly! within the same AZ is free.
 - Increase availability: Failover in case of loss of AZ, loss of network, instance or storage failure
 - No manual intervention in apps
 - Not used for scaling
+
+Note that multi AZ is only for disaster recovery and replica is only for performance.
 
 ### RDS Security - Encryption
 
@@ -114,22 +125,25 @@ Benefits:
 Aurora is a proprietary technology from AWS (not open sourced). Postgres and MySQL are both supported as Aurora DB, which means your driver will work as if Aurora was a Postgres or MySQL db).
 
 - It is "AWS cloud optimised" and claims 5x performance improvement over MySQL on RDS, over 3x the performance of Postgres on RDS.
-- Aurora storage automatically grows in increments of 10 GB, up to 64 TB.
+- Aurora storage automatically grows in increments of 10 GB, up to 128 TB.
+- Compute resources can scale up to 96 vCPUs and 768 GB of memory.
 - Aurora can have 15 replicas while MySQL has 5, and the replication process is faster (sub 10 ms replica lag)
 - Failover in Aurora is instantaneous. It's HA native.
-- Aurora costs more than RDS (20%more) - but is more efficient.
+- Aurora costs more than RDS (20% more) - but is more efficient.
 
 ### Aurora High Availability and Read Scaling
 
-- 6 Copies of your data across 3 AZ:
+- 2 copies of data are contained in each AZ, with Minimum of 3 AZs => >= 6 Copies of your data:
   - 4 copies out of 6 needed for writes
   - 3 copies out of 6 need for reads
   - Self healing with peer-to-peer replication
   - Storage is striped across 100s of volumes
 - One Aurora instance takes writes (master)
   - Automated failover for master in less than 30s
+- Aurora is designed to transparently handle the loss of up to 2 copies of data without affecting database write availability and up to 3 copies without affecting read availability.
 - Master + up to 15 Aurora Read Replicas serve reads (Auto scaling)
 - Support for Cross Region Replication
+- Aurora storage is also self-healing. Data blocks and disks are continuously scanning for errors and repaired automatically.
 
 ### Aurora DB Cluster
 
@@ -138,10 +152,17 @@ Aurora is a proprietary technology from AWS (not open sourced). Postgres and MyS
 
 ![Aurora Cluster](./images/Aurora_cluster.png)
 
+### Aurora replica types
+- Aurora replicas
+- MySQL replicas
+- PostgreSQL replicas
+
 ### Features of Aurora
 
 - Automatic fail-over
+    - Only available with Aurora replicas
 - Backup and Recovery
+    - Backups don't impact database performance. And you can share Aurora snapshots with other AWS accounts.
 - Isolation and security
 - Industry compliance
 - Push-button scaling
@@ -165,7 +186,7 @@ You are responsible for protecting the instance with security groups. You can't 
 
 Automated db instantiation and auto-scaling based on actual usage.
 
-- Good for infrequent intermittent or unpredictable workloads.
+- Good for infrequent, intermittent or unpredictable workloads.
   - No capacity planning needed
   - Pay per second, can be more cost-effective
 
