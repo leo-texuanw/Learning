@@ -22,6 +22,7 @@ NoSQL doesn't mean no SQL but not only SQL.
 There's no "right or wrong" for NoSQL vs SQL, they just require to model the data differently and think about user queries differently.
 
 ## DynamoDB
+Stored on SSD storage.
 
 NoSQL Serverless Database.
 
@@ -87,7 +88,7 @@ e.g. 3: write 120 objects per minute of 2 KB each => need $120 / 60 * 2 = 4 WCU$
 
 #### DynamoDB - Strong Consistent Read vs Eventually Consistent Read
 
-**Eventually Consistent Read:** if we read just after a write, it's possible we'll get unexpected response because of replication.
+**Eventually Consistent Read:** if we read just after a write, it's possible we'll get unexpected response because of replication. But got synced normally within 1 second.
 
 **Strong Consistent Read:** if we read just after a write, we will get the correct data.
 
@@ -240,16 +241,22 @@ DynamoDB has a feature called "Conditional Update/ Delete". That means that you 
 
 ### DynamoDB - DAX
 
-DynamoDB Accelerator.
+DynamoDB Accelerator. Fully managed, highly available, in-memory cache.
 
 - Seamless cache for DynamoDB, no application rewrite.
 - Writes go through DAX to DynamoDB
 - Micro second latency for cached reads & queries
 - Solves the Hot Key problem (too many reads)
 - 5 minutes TTL for cache by default
-- Up to 10 nodes in the cluster
+- Up to 10 nodes in the cluster and up to 10x performance improvement.
 - Multi AZ (3 nodes minimum recommended for production)
-- Secure (Encryption at rest with KMS, VPC, IAM, CloudTrail)
+- Secure
+  - Encryption at rest with KMS
+  - Site-to-site VPN
+  - Direct Connect (DX)
+  - Integrate with CloudWatch and CloudTrail
+  - VPC endpoints, IAM policies and roles, Fine-grained access
+- Compatible with DaynamoDB API calls
 
 #### DAX vs ElastiCahce
 
@@ -259,7 +266,7 @@ ElastiCache - Store Aggregation Result
 
 ### DynamoDB Streams
 
-Changes in DynamoDB (Create, Update, Delete) can end up in a DynamoDB Stream.
+Time-ordered sequence of item-level changes in DynamoDB (Create, Update, Delete) can end up stored in a DynamoDB Stream.
 
 - This stream can be read by AWS lambda & EC2 instances, and we can then do
   - React to changes in real time (welcome email to new users
@@ -276,7 +283,7 @@ You need to choose the information that will be written to the stream whenever t
 - OLD_IMAGE - The entire item, as it appeared before it was modified
 - NEW_AND_OLD_IMAGES - Both the new and old images of the item
 
-DynamoDB Streams are made of shards, just like Kinesis Data Streams. You don't provision shards, this is automated by AWS. Records are not retroactively populated in a stream after enabling it.
+DynamoDB Streams are broken up into shards, just like Kinesis Data Streams. You don't provision shards, this is automated by AWS. Records are not retroactively populated in a stream after enabling it.
 
 #### DynamoDB Streams & Lambda
 
@@ -337,10 +344,12 @@ General CLI pagination options including DynamoDB/ S3:
 ### DynamoDB Transactions
 
 Transaction = Ability to Create/ Update/ Delete multiple rows in different tables at the same time. It's an "all or nothing" type of operation.
+It's ACID (atomicity, consistency, isolation and durability)
 
 - Write Modes: Standard, Transactional
 - Read Modes: Eventual Consistency, Strong Consistency, Transactional
 - Consume 2x of WCU/ RCU
+- Up to 25 items or 4 MB of data
 
 ### DynamoDB as Session State Cache
 
@@ -396,6 +405,24 @@ Send large data to S3 and send small metadata to DynamoDB.
   - Point in time restore like RDS
   - No performance impact
 - Global Tables
-  - Multi region, fully replicated, high performance
+  - Managed, multi-master, multi-region, fully replicated, high performance
+  - Great for globally distributed applications
+  - It is based on DynamoDB Streams
+  - Replication latency under 1 second
 - Amazon DMS can be used to migrate to DynamoDB (from Mongo, Oracle, MySQL, S3, etc...)
 - You can launch a local DynamoDB on your computer for development purpose
+
+### DynamoDB - Backup
+
+#### On-Demand Backup and Restore
+- Full backups at any time
+- Zero impact on table performance or availability
+- Consistent within seconds and retained until deleted
+- Operates within same region as the source table
+
+#### Point-in-Time Recovery
+- Protects against accidental writes or deletes
+- Restore to any point in the last 35 days
+- Incremental backups
+- Not enalbled by default
+- Latest restorable: 5 minutes in the past
