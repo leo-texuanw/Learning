@@ -1,10 +1,16 @@
-## [A re-introduction to JavaScript(JS tutorial)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/A_re-introduction_to_JavaScript)
-
-### Overview
-
-#### Number
-Numbers in JavaScript are "double-precision 64-bit format so there's no such thing
-as an integer in JavaScript.
+## Types
+### Undefined and Null
+It's a flaw that `undefined` is a variable not a keyword. Hence, in many standards, it's required to get value of `undefined` by using `void 0` in case it's been modified.  
+`null` is a keyword. And it's defined but it's value is `null`.
+### Boolean
+### String
+String is 
+Maximum length of a String is `2^53 - 1`. The length is not the count of characters but the length of UTF16 encoded string.  
+### Number
+Numbers in JavaScript are "double-precision 64-bit format so there's no such thing as an integer in JavaScript.  
+- Infinity: `x / (0)`
+- -Infinity: `x / (-0)`
+- Number comparison: `Math.abs(result - value) <= Number.EPSILON`
 
 ```javascript
 0.1 + 0.2 == 0.30000000000000004;
@@ -35,53 +41,24 @@ avaScript also has the special values Infinity and -Infinity:
 isFinite(1 / 0);  // false
 ```
 
-#### Variables
-- `let` allows you to declare block-level variables. The declared variable is
-available from the block it is enclosed in.
-- `const` allows you to declare variables whose values are never intended to
-change. The variable is available from the block it is declared in.
-- A variable declared with the `var` keyword is available from the function it is
-declared in.
-- If you declare a variable without assigning any value to it, its type is
-undefined.
+### Symbol
+``` javascript
+    var o = new Object
 
-In JavaScript, blocks do not have scope; only functions have scope.
+    // Define Symbol.iterator for o
+    o[Symbol.iterator] = function() {
+        var v = 0
+        return {
+            next: function() {
+                return { value: v++, done: v > 10 }
+            }
+        }        
+    };
 
-#### Operators
-```javascript
-123 === '123'; // false
-1 === true;    // false
+    for(var v of o) 
+        console.log(v); // 0 1 2 3 ... 9
 ```
-
-#### Control structures
-JavaScript also contains two other prominent for loops: for...of
-
-```javascript
-for (let value of array) {
-  // do something with value
-}
-```
-and for...in:
-
-```javascript
-for (let property in object) {
-  // do something with object property
-}
-```
-The `&&` and `||` operators use short-circuit logic, which means whether they will
-execute their second operand is dependent on the first. This is useful for
-checking for null objects before accessing their attributes:
-
-```javascript
-var name = o && o.getName();
-```
-Or for caching values (when falsy values are invalid):
-
-```javascript
-var name = cachedName || (cachedName = getName());
-```
-
-#### Objects
+### Objects
 JavaScript objects can be thought of as simple collections of name-value pairs.  
 There are two basic ways to create an empty object:
 
@@ -113,8 +90,55 @@ If you want to append an item to an array simply do it like this:
 a.push(item1, item2, ...)
 ```
 
+## Variables
+- `let` allows you to declare block-level variables. The declared variable is
+available from the block it is enclosed in.
+- `const` allows you to declare variables whose values are never intended to
+change. The variable is available from the block it is declared in.
+- A variable declared with the `var` keyword is available from the function it is
+declared in.
+- If you declare a variable without assigning any value to it, its type is
+undefined.
 
-#### Functions
+In JavaScript, blocks do not have scope; only functions have scope.
+
+## Operators
+```javascript
+123 === '123'; // false
+1 === true;    // false
+```
+
+## Control structures
+JavaScript also contains two other prominent for loops: for...of
+
+```javascript
+for (let value of array) {
+  // do something with value
+}
+```
+and for...in:
+
+```javascript
+for (let property in object) {
+  // do something with object property
+}
+```
+The `&&` and `||` operators use short-circuit logic, which means whether they will
+execute their second operand is dependent on the first. This is useful for
+checking for null objects before accessing their attributes:
+
+```javascript
+var name = o && o.getName();
+```
+Or for caching values (when falsy values are invalid):
+
+```javascript
+var name = cachedName || (cachedName = getName());
+```
+
+
+
+## Functions
 ``` javascript
 function add(x, y) {
   var total = x + y;
@@ -159,7 +183,7 @@ Luckily, JavaScript lets you call a function with an arbitrary array of argument
 avg.apply(null, [2, 3, 4, 5]); // 3.5
 ```
 
-#### Anonymous Functions
+## Anonymous Functions
 ``` javascirpt
 var avg = function(){
 	...
@@ -184,7 +208,7 @@ The name provided to a function expression as above is only available to the fun
 **Note** that JavaScript functions are themselves objects — like everything else in JavaScript — and you
 can add or change properties on them just like we've seen earlier in the Objects section.  
 
-#### Custom objects
+## Custom objects
 Pretty ugly:
 
 ``` javascript
@@ -263,9 +287,9 @@ that isn't set, JavaScript will check Person.prototype to see if that property e
 As a result, anything assigned to Person.prototype becomes available to all instances of that
 constructor via the this object.
 
-##### Inner Functions
+### Inner Functions
 
-#### Closures
+## Closures
 ``` javascript
     function makeAdder(a) {
       return function(b) {

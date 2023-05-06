@@ -1,13 +1,14 @@
 ## VPC
 
 VPC: Virtual private cloud (regional resource)
-![VPC_Example](./images/vpc_example.png)
 
-Subnets: Tied to an AZ, network partition of the VPC (AZ resource)
+![VPC Example](./images/VPC_example.png)
 
-Public subnet - a subnet that is accessible from the internet (has 1 by default) 
+Subnets: Tied to an AZ (can't across AZs), network partition of the VPC (AZ resource)
 
-Route Tables - define access to the internet and between subnets 
+- Public subnet: a subnet that is accessible from the internet (has 1 by default) 
+
+Route Tables: define access to the internet and between subnets 
 
 ### Internet Gateway & NAT Gateways
 
@@ -21,13 +22,13 @@ Private subnet has a route to NAT and NAT has a route to Internet Gateway.
 
 ### Network ACL & Security Groups
 
-Network ACL: A firewall which controls traffic from and to subnet. (1st mechanism of defence)
+Network ACL: A firewall which controls traffic from and to subnet. (1st mechanism of defense)
 
 - Subnet rules for inbound and outbound.
 - Rules only include IP addresses
 - A default NACL allows everything in and out
 
-Security Groups: A firewall that controls traffic to and from an ENI/ an EC2 instance. (2nd mechanism of defence)
+Security Groups: A firewall that controls traffic to and from an ENI/ an EC2 instance. (2nd mechanism of defense)
 
 - Rules include IP addresses and other security groups
 
@@ -41,7 +42,7 @@ Security Groups: A firewall that controls traffic to and from an ENI/ an EC2 ins
 
 ### VPC Peering
 
-Connect two VPC, privately using ASW's network. Make them behave as if they were in the same network. To achieve that, there must not have overlapping CIDR (IP ranges) 
+Connect two VPC, privately using ASW's network. Make them behave as if they were in the same network. To achieve that, there must not have overlapping [CIDR](https://cidr.xyz) (IP ranges) 
 
 VPC Peering connection is not transitive (A connected with B & A connected with C. B can't talk to C naturally)
 
