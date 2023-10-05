@@ -1,6 +1,6 @@
 ## [SQL Tutorial](https://www.w3schools.com/sql)
 
-Another Website: [](https://sqlzoo.net/)  
+Another Website: [sqlzoo.net](https://sqlzoo.net/)  
 **Keep in Mind That SQL keywords are NOT case sensitive: select is the same as SELECT.**
 
 Some of The Most Important SQL Commands
