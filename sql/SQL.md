@@ -1,8 +1,10 @@
 ## [SQL Tutorial](https://www.w3schools.com/sql)
-Another Website: [https://sqlzoo.net/]()
+
+Another Website: [](https://sqlzoo.net/)  
 **Keep in Mind That SQL keywords are NOT case sensitive: select is the same as SELECT.**
 
 Some of The Most Important SQL Commands
+
 - SELECT - extracts data from a database
 - UPDATE - updates data in a database
 - DELETE - deletes data from a database
@@ -16,29 +18,35 @@ Some of The Most Important SQL Commands
 - DROP INDEX - deletes an index
 
 ### Comments
+
 -- and /\* \*/
 
 ### Select
+
 ``` sql
     SELECT column1, column2, ...
     FROM table_name;
 ```
 
 #### Select Distinct Statement
+
 ``` sql
     SELECT DISTINCT column1, column2, ...
     FROM table_name;
 ```
 
 ### Where Clause
+
 ``` sql
     SELECT column1, column2, ...
     FROM table_name
     WHERE condition;
 ```
+
 SQL requires single quotes around text values (most database systems will also allow double quotes).
 
 #### Operators in The WHERE Clause
+
 The following operators can be used in the WHERE clause:
 
 - =            Equal
@@ -48,11 +56,17 @@ The following operators can be used in the WHERE clause:
 - >=           Greater than or equal
 - <=           Less than or equal
 - BETWEEN AND  Between an inclusive range (values, texts, dates)
-- LIKE         Search for a pattern: %, \_, [], ^ or !
-- IN           To specify multiple possible values for a column
+- LIKE         Search for a pattern (costly and doesn't match `NULL`):
+  - % (try not to pattern match something start with %)
+  - \_
+  - [] (only supported by Access and SQL Server). e.g. '[Aa]%' -> start with 'A' or 'a'
+  - ^ (used with [] only supported by SQL Server), e.g. '[^Aa]%' -> start with anything but 'A' or 'a'
+  - ! (Access version of ^)
+- IN           To specify multiple possible values for a column (More efficient than multiple `OR`)
 - IS NULL
 
 e.g. 1
+
 ```
     SELECT * FROM Orders
     WHERE OrderDate BETWEEN #01/07/1996# AND #31/07/1996#;
@@ -62,31 +76,39 @@ e.g. 1
 ```
 
 e.g. 2
+
 ```
     SELECT name FROM world
     WHERE name LIKE 'Chi__' OR name LIKE 'United%'
 ```
 
 e.g. 3
+
 ```
     SELECT name, population FROM world
     WHERE name IN ('Sweden', 'Norway', 'Denmark');
 ```
 
 ### And, Or, Not, Exclusive OR
+
 #### AND Syntax
+
 ``` sql
     SELECT column1, column2, ...
     FROM table_name
     WHERE condition1 AND condition2 AND condition3 ...;
 ```
+
 #### OR Syntax
+
 ``` sql
     SELECT column1, column2, ...
     FROM table_name
     WHERE condition1 OR condition2 OR condition3 ...;
 ```
+
 #### NOT Syntax
+
 ``` sql
     SELECT column1, column2, ...
     FROM table_name
@@ -94,6 +116,7 @@ e.g. 3
 ```
 
 #### Exclusive OR Syntax
+
 ``` sql
     SELECT column1, column2, ...
     FROM table_name
@@ -101,6 +124,7 @@ e.g. 3
 ```
 
 #### Combining AND, OR and NOT
+
 ``` sql
     SELECT * FROM Customers
     WHERE Country='Germany' AND (City='Berlin' OR City='München');
@@ -110,6 +134,7 @@ e.g. 3
 ```
 
 ### Order By
+
 ``` sql
     SELECT column1, column2, ...
     FROM table_name
@@ -117,6 +142,7 @@ e.g. 3
 ```
 
 #### ORDER BY Several Columns
+
 ``` sql
     SELECT * FROM Customers
     ORDER BY Country, CustomerName;
@@ -134,6 +160,7 @@ e.g. 3
                                FROM world
                               WHERE population>0)
 ```
+
 You need the condition population>0 in the sub-query as some countries have null for population.
 
 ```
@@ -145,6 +172,7 @@ You need the condition population>0 in the sub-query as some countries have null
 ```
 
 ### Insert Into
+
 ``` sql
     INSERT INTO table_name (column1, column2, column3, ...)
     VALUES (value1, value2, value3, ...);
@@ -156,17 +184,23 @@ You need the condition population>0 in the sub-query as some countries have null
 ```
 
 ### Null Values
+
 #### How to Test for NULL Values?
-It is not possible to test for NULL values with comparison operators, such as =, <, or <>.  
+
+It is not possible to test for NULL values with comparison operators, such as =, <, or <>.
+Which means condition `column_name != val` will not return rows whose `column_name IS NULL`.  
 We will have to use the IS NULL and IS NOT NULL operators instead.
 
 ##### IS NULL Syntax
+
 ``` sql
     SELECT column_names
     FROM table_name
     WHERE column_name IS NULL
 ```
+
 ##### IS NOT NULL Syntax
+
 ``` sql
     SELECT column_names
     FROM table_name
@@ -174,6 +208,7 @@ We will have to use the IS NULL and IS NOT NULL operators instead.
 ```
 
 ### Update Statement
+
 ``` sql
     UPDATE table_name
     SET column1 = value1, column2 = value2, ...
@@ -181,42 +216,53 @@ We will have to use the IS NULL and IS NOT NULL operators instead.
 ```
 
 #### Update Warning
+
 Be careful when updating records. If you omit the WHERE clause, ALL records will be updated!
 
 ### Delete
+
 ``` sql
     DELETE FROM table_name
     WHERE condition;
 ```
+
 #### Delete All Records
+
 ``` sql
     DELETE FROM table_name;
     // or:
     DELETE * FROM table_name;
 ```
+
 Note: Be careful when deleting records in a table! Notice the WHERE clause in the DELETE statement.
 The WHERE clause specifies which record(s) that should be deleted. If you omit the WHERE clause, all
 records in the table will be deleted!  
 
 ### Top, Limit or Rownum Clause
+
 The SELECT TOP clause is used to specify the number of records to return.  
 Not all database systems support the SELECT TOP clause.
 MySQL supports the LIMIT clause to select a limited number of records, while Oracle uses ROWNUM.  
 
-#### Server / MS Access Syntax:
+#### Server / MS Access Syntax
+
 ``` sql
     SELECT TOP number|percent column_name(s)    // SELECT TOP 50 PERCENT * FROM Customers;
     FROM table_name
     WHERE condition;
 ```
-#### MySQL Syntax:
+
+#### MySQL Syntax
+
 ``` sql
     SELECT column_name(s)
     FROM table_name
     WHERE condition
     LIMIT number;
 ```
-#### Oracle Syntax:
+
+#### Oracle Syntax
+
 ``` sql
     SELECT column_name(s)
     FROM table_name
@@ -224,35 +270,39 @@ MySQL supports the LIMIT clause to select a limited number of records, while Ora
 ```
 
 ### [Functions](https://sqlzoo.net/wiki/FUNCTIONS)
+
 MAX, MIN, COUNT, AVG, SUM, LENGTH(str), LEFT(str, len)
 
 #### Round
+
 ROUND(population, x)
 ROUND(7253.86, 0)    ->  7254
 ROUND(7253.86, 1)    ->  7253.9
 ROUND(7253.86,-3)    ->  7000
 
-
 ### Alias
+
 ``` sql
     SELECT CustomerName, Address + ', ' + PostalCode + ' ' + City + ', ' + Country AS Address
     FROM Customers;
 ```
 
-But if in MySQL use `CONCAT`:
+Note: Use `+` in Access, use `CONCAT` in MySQL. And use `||` in some other main DBs.
+
 ``` sql
     SELECT CustomerName, CONCAT(Address, ', ', PostalCode, ', ', City, ', ', Country) AS Address
     FROM Customers;
 ```
 
-
 ### Joins
+
 - (INNER) JOIN: Returns records that have matching values in both tables
 - LEFT (OUTER) JOIN: Returns all records from the left table, and the matched records from the right table
 - RIGHT (OUTER) JOIN: Returns all records from the right table, and the matched records from the left table
 - FULL (OUTER) JOIN: Returns all records when there is a match in either left or right table
 
 #### Inner Join
+
 ``` sql
     SELECT Orders.OrderID, Customers.CustomerName, Shippers.ShipperName
     FROM ((Orders
@@ -261,13 +311,17 @@ But if in MySQL use `CONCAT`:
 ```
 
 #### Left Join
+
 The result is NULL from the right side, if there is no match.
 
 #### Self Join
+
 A self JOIN is a regular join, but the table is joined with itself.
 
 ### Union Operator
+
 #### UNION Syntax
+
 The UNION operator is used to combine the result-set of two or more SELECT statements.
 
 - Each SELECT statement within UNION must have the same number of columns
@@ -275,6 +329,7 @@ The UNION operator is used to combine the result-set of two or more SELECT state
 - The columns in each SELECT statement must also be in the same order
 
 #### UNION ALL Syntax
+
 The UNION operator selects only distinct values by default. To allow duplicate values, use UNION ALL:
 
 ``` sql
@@ -282,10 +337,11 @@ The UNION operator selects only distinct values by default. To allow duplicate v
     UNION ALL
     SELECT column_name(s) FROM table2;
 ```
+
 Note: The column names in the result-set are usually equal to the column names in the first SELECT statement in the UNION.
 
-
 ### Having Clause
+
 The HAVING clause was added to SQL because the WHERE keyword could not be used with aggregate functions.
 
 ``` sql
@@ -297,8 +353,8 @@ The HAVING clause was added to SQL because the WHERE keyword could not be used w
     ORDER BY COUNT(CustomerID) DESC;
 ```
 
-
 ### Exist Operator
+
 The EXISTS operator is used to test for the existence of any record in a subquery.
 
 ```
@@ -311,6 +367,7 @@ The EXISTS operator is used to test for the existence of any record in a subquer
 ### ANY and ALL Operators
 
 ### Select into statement
+
 The SELECT INTO statement copies data from one table into a new table.  
 
 ```
@@ -321,6 +378,7 @@ The SELECT INTO statement copies data from one table into a new table.
 ```
 
 e.g 1
+
 ``` sql
     SELECT Customers.CustomerName, Orders.OrderID INTO CustomersBackup2017 IN 'Backup.mdb'
     FROM Customers
@@ -329,14 +387,15 @@ e.g 1
 ```
 
 e.g. 2: used to create a new, empty table using the schema of another.
+
 ``` sql
     SELECT * INTO newtable
     FROM oldtable
     WHERE 1 = 0;
 ```
 
-
 ### Insert Into Select
+
 The INSERT INTO SELECT statement copies data from one table and inserts it into another table.
 
 - INSERT INTO SELECT requires that data types in source and target tables match
@@ -353,8 +412,8 @@ The INSERT INTO SELECT statement copies data from one table and inserts it into 
     WHERE condition;
 ```
 
-
 ### CASE Statement
+
 The CASE statement goes through conditions and returns a value when the first condition is met (like an IF-THEN-ELSE statement). So, once a condition is true, it will stop reading and return the result. If no conditions are true, it returns the value in the ELSE clause.  
 
 If there is no ELSE part and no conditions are true, it returns NULL.
@@ -369,6 +428,7 @@ If there is no ELSE part and no conditions are true, it returns NULL.
 ```
 
 e.g. 1:
+
 ``` sql
     SELECT OrderID, Quantity,
     CASE
@@ -380,6 +440,7 @@ e.g. 1:
 ```
 
 e.g. 2:
+
 ``` sql
     SELECT CustomerName, City, Country
     FROM Customers
@@ -391,7 +452,9 @@ e.g. 2:
 ```
 
 ### NULL Functions
+
 #### MySQL
+
 The MySQL IFNULL() function lets you return an alternative value if an expression is NULL:
 
 ``` sql
@@ -400,25 +463,32 @@ The MySQL IFNULL() function lets you return an alternative value if an expressio
 ```
 
 or we can use the COALESCE() function, like this:
+
 ``` sql
     SELECT ProductName, UnitPrice * (UnitsInStock + COALESCE(UnitsOnOrder, 0))
     FROM Products;
 ```
+
 #### SQL Server
+
 The SQL Server ISNULL() function lets you return an alternative value when an expression is NULL:
 
 ``` sql
     SELECT ProductName, UnitPrice * (UnitsInStock + ISNULL(UnitsOnOrder, 0))
     FROM Products;
 ```
+
 #### MS Access
+
 The MS Access IsNull() function returns TRUE (-1) if the expression is a null value, otherwise FALSE (0):
 
 ``` sql
     SELECT ProductName, UnitPrice * (UnitsInStock + IIF(IsNull(UnitsOnOrder), 0, UnitsOnOrder))
     FROM Products;
 ```
+
 #### Oracle
+
 The Oracle NVL() function achieves the same result:
 
 ``` sql
@@ -427,10 +497,12 @@ The Oracle NVL() function achieves the same result:
 ```
 
 ### Stored Procedure
+
 A stored procedure is a prepared SQL code that you can save, so the code can be reused over and over again.
 You can also pass parameters to a stored procedure, so that the stored procedure can act based on the parameter value(s) that is passed.
 
 Syntax
+
 ``` sql
     CREATE PROCEDURE procedure_name
     AS
@@ -439,11 +511,13 @@ Syntax
 ```
 
 Execute a Stored Procedure
+
 ``` sql
     EXEC procedure_name;
 ```
 
 e.g.
+
 ``` sql
     CREATE PROCEDURE SelectAllCustomers @City nvarchar(30), @PostalCode nvarchar(10)
     AS
